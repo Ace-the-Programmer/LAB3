@@ -1,53 +1,79 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>
-      Mobile Sensors & Feedback
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="layout-wrapper">
+    
+    <!-- Immersive Dice Area -->
+    <div class="dice-area">
+      <!-- Shadow moves with X, but not as much with Y to maintain perspective -->
+      <div class="dice-shadow" [style.transform]="'translate(calc(-50% + ' + ((pullValueX + diceOffsetX) * 8) + 'px), ' + (pullValueY * 3) + 'px)'"></div>
+      
+      <!-- Dice moves with X and Y sliders -->
+      <div class="dice" (click)="onDiceClick()" [style.transform]="'translate(' + ((pullValueX + diceOffsetX) * 12) + 'px, ' + (pullValueY * 12) + 'px)'" style="cursor: pointer;">
+        <div class="dot center" *ngIf="dice() === 1 || dice() === 3 || dice() === 5"></div>
+        <div class="dot top-left" *ngIf="dice() !== 1"></div>
+        <div class="dot bottom-right" *ngIf="dice() !== 1"></div>
+        <div class="dot top-right" *ngIf="dice() >= 4"></div>
+        <div class="dot bottom-left" *ngIf="dice() >= 4"></div>
+        <div class="dot middle-left" *ngIf="dice() === 6"></div>
+        <div class="dot middle-right" *ngIf="dice() === 6"></div>
+      </div>
+    </div>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Mobile Sensors & Feedback</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- Bottom Controls -->
+    <div class="bottom-panel">
+      
+      <ion-card color="dark" style="border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); margin: 0 0 16px 0;">
+        <ion-card-header>
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-col size="auto">
+                <ion-text color="light">
+                  <h2 style="margin: 0; font-weight: 700; font-family: monospace; font-size: 1.4rem;">accel</h2>
+                </ion-text>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-chip color="medium" style="border-radius: 8px; font-family: monospace; font-size: 0.85rem; margin-right: 4px;">x: {{ pullValueX }}</ion-chip>
+                <ion-chip color="medium" style="border-radius: 8px; font-family: monospace; font-size: 0.85rem; margin: 0;">y: {{ pullValueY }}</ion-chip>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <ion-grid class="ion-no-padding" style="margin-bottom: 24px;">
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-col size="auto">
+                <ion-text color="medium" style="font-weight: 700; font-size: 0.9rem;">X Axis</ion-text>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-text color="tertiary" style="font-weight: 700;">{{ pullValueX }}</ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-range [value]="pullValueX" (ionInput)="onPullX($event)" (ionKnobMoveEnd)="onReleaseX()" min="-10" max="10" mode="ios" color="tertiary" style="--bar-background: rgba(255,255,255,0.1); --bar-background-active: rgba(255,255,255,0.1); --bar-height: 6px; --bar-border-radius: 4px; --knob-box-shadow: inset 0 0 0 3px #fff, 0 0 12px rgba(56,189,248,0.8); --knob-size: 20px; padding: 0; margin-top: 4px;"></ion-range>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-col size="auto">
+                <ion-text color="medium" style="font-weight: 700; font-size: 0.9rem;">Y Axis</ion-text>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-text color="tertiary" style="font-weight: 700;">{{ pullValueY }}</ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-range [value]="pullValueY" (ionInput)="onPullY($event)" (ionKnobMoveEnd)="onReleaseY()" min="-10" max="10" mode="ios" color="tertiary" style="--bar-background: rgba(255,255,255,0.1); --bar-background-active: rgba(255,255,255,0.1); --bar-height: 6px; --bar-border-radius: 4px; --knob-box-shadow: inset 0 0 0 3px #fff, 0 0 12px rgba(56,189,248,0.8); --knob-size: 20px; padding: 0; margin-top: 4px;"></ion-range>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
 
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Shake-to-Roll Dice</ion-card-title>
-      <ion-card-subtitle>Shake device to roll</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content class="ion-text-center">
-      <ion-text color="primary" style="font-size: 10rem; display: block; margin: 0; line-height: 1; font-weight: normal;">
-        {{ diceFaces[dice() - 1] }}
-      </ion-text>
-
-      <ion-button expand="block" (click)="roll()" [disabled]="!canRoll()">
-        Manual Roll
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
-
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Accelerometer Data</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-label>X Axis</ion-label>
-          <ion-note slot="end" color="medium">{{ acceleration().x | number:'1.2-2' }}</ion-note>
-        </ion-item>
-        <ion-item>
-          <ion-label>Y Axis</ion-label>
-          <ion-note slot="end" color="medium">{{ acceleration().y | number:'1.2-2' }}</ion-note>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-
+    </div>
+  </div>
 </ion-content>
