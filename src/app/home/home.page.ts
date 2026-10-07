@@ -1,6 +1,6 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { Motion } from '@capacitor/motion';
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-home',
@@ -11,19 +11,15 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 export class HomePage implements OnInit {
   dice = signal(1);
   canRoll = signal(true);
+  diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
-  acceleration = signal({ x: 0, y: 0, z: 0 });
-
-  alpha = signal(0);
-  beta = signal(0);
-  gamma = signal(0);
+  acceleration = signal({ x: 0, y: 0 });
 
   constructor() {}
 
   ngOnInit() {
     this.shake();
     this.startMotion();
-    this.startOrientation();
   }
 
   async shake() {
@@ -56,49 +52,15 @@ export class HomePage implements OnInit {
       if (event.accelerationIncludingGravity) {
         this.acceleration.set({
           x: event.accelerationIncludingGravity.x || 0,
-          y: event.accelerationIncludingGravity.y || 0,
-          z: event.accelerationIncludingGravity.z || 0
+          y: event.accelerationIncludingGravity.y || 0
         });
       }
-    });
-  }
-
-  async startOrientation() {
-    await Motion.addListener('orientation', (event) => {
-      this.alpha.set(event.alpha || 0);
-      this.beta.set(event.beta || 0);
-      this.gamma.set(event.gamma || 0);
     });
   }
 
   async impact() {
     await Haptics.impact({
       style: ImpactStyle.Heavy
-    });
-  }
-
-  async success() {
-    await Haptics.notification({
-      type: NotificationType.Success
-    });
-  }
-
-  async warning() {
-    await Haptics.notification({
-      type: NotificationType.Warning
-    });
-  }
-
-  async error() {
-    await Haptics.notification({
-      type: NotificationType.Error
-    });
-  }
-
-  async vibrate(x: number) {
-    const news = x * 1000;
-    await Haptics.vibrate({
-      duration: news
     });
   }
 }
