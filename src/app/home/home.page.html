@@ -1,20 +1,102 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      Mobile Sensors & Feedback
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Mobile Sensors & Feedback</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <!-- Shake to Roll Dice -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Shake-to-Roll Dice</ion-card-title>
+      <ion-card-subtitle>Shake device to roll</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content class="ion-text-center">
+      <ion-text color="primary" style="font-size: 8rem; display: block; margin: 20px 0; font-weight: bold;">
+        {{ dice() }}
+      </ion-text>
+      <!-- Optional button to manually roll for testing in browser -->
+      <ion-button expand="block" (click)="roll()" [disabled]="!canRoll()">
+        Manual Roll
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Displaying Sensor Data -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Accelerometer Data</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>X Axis</ion-label>
+          <ion-note slot="end" color="medium">{{ acceleration().x | number:'1.2-2' }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Y Axis</ion-label>
+          <ion-note slot="end" color="medium">{{ acceleration().y | number:'1.2-2' }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Z Axis</ion-label>
+          <ion-note slot="end" color="medium">{{ acceleration().z | number:'1.2-2' }}</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Device Orientation Data -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Device Orientation</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Alpha</ion-label>
+          <ion-note slot="end" color="medium">{{ alpha() | number:'1.2-2' }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Beta</ion-label>
+          <ion-note slot="end" color="medium">{{ beta() | number:'1.2-2' }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Gamma</ion-label>
+          <ion-note slot="end" color="medium">{{ gamma() | number:'1.2-2' }}</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Haptic Feedback (Notifications) -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Haptic Feedback (Notifications)</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="block" color="success" (click)="success()">Success Notification</ion-button>
+      <ion-button expand="block" color="warning" (click)="warning()">Warning Notification</ion-button>
+      <ion-button expand="block" color="danger" (click)="error()">Error Notification</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Haptic Feedback (Vibrations) -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Haptic Feedback (Vibrations)</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="block" fill="outline" (click)="vibrate(1)">1 Second Vibration</ion-button>
+      <ion-button expand="block" fill="outline" (click)="vibrate(2)">2 Seconds Vibration</ion-button>
+      <ion-button expand="block" fill="outline" (click)="vibrate(3)">3 Seconds Vibration</ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
