@@ -1,12 +1,9 @@
 <ion-content [fullscreen]="true">
   <div class="layout-wrapper">
     
-    <!-- Immersive Dice Area -->
     <div class="dice-area">
-      <!-- Shadow moves with X, but not as much with Y to maintain perspective -->
       <div class="dice-shadow" [style.transform]="'translate(calc(-50% + ' + ((pullValueX + diceOffsetX) * 8) + 'px), ' + (pullValueY * 3) + 'px)'"></div>
       
-      <!-- Dice moves with X and Y sliders -->
       <div class="dice" (click)="onDiceClick()" [style.transform]="'translate(' + ((pullValueX + diceOffsetX) * 12) + 'px, ' + (pullValueY * 12) + 'px)'" style="cursor: pointer;">
         <div class="dot center" *ngIf="dice() === 1 || dice() === 3 || dice() === 5"></div>
         <div class="dot top-left" *ngIf="dice() !== 1"></div>
@@ -18,7 +15,6 @@
       </div>
     </div>
 
-    <!-- Bottom Controls -->
     <div class="bottom-panel">
       
       <ion-card color="dark" style="border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); margin: 0 0 16px 0;">

@@ -29,7 +29,6 @@ export class HomePage implements OnInit {
 
   async shake() {
     await Motion.addListener('accel', (event) => {
-      // Safe check for acceleration property, although TS might complain without it
       if (event.acceleration && event.acceleration.x !== undefined && event.acceleration.y !== undefined) {
         const x = event.acceleration.x;
         const y = event.acceleration.y;
@@ -58,18 +57,15 @@ export class HomePage implements OnInit {
     
     let rolls = 0;
     const interval = setInterval(() => {
-      // Randomize the face
       this.dice.set(Math.floor(Math.random() * 6) + 1);
       
-      // Randomize the physical position only in X axis without moving the sliders
-      this.diceOffsetX = Math.floor(Math.random() * 21) - 10; // -10 to 10
+      this.diceOffsetX = Math.floor(Math.random() * 21) - 10;
       this.cdr.detectChanges();
 
       rolls++;
       if (rolls >= 12) {
         clearInterval(interval);
         
-        // Reset back to center
         this.diceOffsetX = 0;
         
         this.impact();
@@ -106,9 +102,7 @@ export class HomePage implements OnInit {
   }
 
   updateDiceFromPull() {
-    // Map the pull values to a dice face (1-6) while pulling
     const sum = Math.abs(this.pullValueX) + Math.abs(this.pullValueY);
-    // Maps 0-20 sum to 1-6
     const face = Math.min(6, Math.max(1, Math.floor((sum / 20) * 5) + 1));
     this.dice.set(face);
   }
